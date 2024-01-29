@@ -7,6 +7,7 @@ import apexpy
 import lompe
 import matplotlib.pyplot as plt
 import h5py
+import os
 from lompe.utils.save_load_utils import save_model
 plt.ioff()
 
@@ -72,11 +73,12 @@ def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_r
         #vvels_in=pickle.dump(model, vvels_fn)
 
         # USE FOR SAVING MODEL PLOTS
-        savefile = plot_save_outdir + str(t).replace(' ','_').replace(':','')
+        savefile = os.path.join(plot_save_outdir,str(t).replace(' ','_').replace(':',''))
+        print(savefile)
         lompe.lompeplot(model, include_data = True, time = t, apex = apex, savekw = {'fname': savefile, 'dpi' : 200})
 
         # USE FOR SAVING MODEL NCs
-        savefile = nc_save_outdir + str(t).replace(' ','_').replace(':','')+'.nc' # create directory to save output as nc to read in
+        savefile = os.path.join(nc_save_outdir,str(t).replace(' ','_').replace(':','')+'.nc') # create directory to save output as nc to read in
         save_model(model, file_name=savefile) # one file per time stamp
         
         # pathlib; os.path for filenames/outdirs
