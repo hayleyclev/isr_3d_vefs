@@ -13,9 +13,10 @@ import os
 from lompe.utils.save_load_utils import save_model
 plt.ioff()
 import pfisr_datahandler as pfisr
+import mag_datahandler as mag
 
 def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_resolution, pfisrfn,
-                    plot_save_outdir, nc_save_outdir):
+                    pokermagfn, plot_save_outdir, nc_save_outdir):
 
 
     # times during entire day
@@ -41,6 +42,7 @@ def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_r
 
     # Collect datasets here
     pfisr_data = pfisr.collect_data(pfisrfn, time_intervals)
+    mag_data = mag.collect_data(pokermagfn, time_intervals)
 
     # loop through times and save
     for i, row in time_intervals.iterrows():
@@ -54,6 +56,7 @@ def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_r
     
         # add datasets for this time 
         model.add_data(pfisr_data[i])
+        model.add_data(mag_data[i])
 
         # run model
         gtg, ltl = model.run_inversion(l1 = 2, l2 = 0.1)
