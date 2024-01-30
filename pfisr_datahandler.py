@@ -11,23 +11,7 @@ import os
 from lompe.utils.save_load_utils import save_model
 plt.ioff()
 
-
-def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_resolution, pfisrfn,
-                    plot_save_outdir, nc_save_outdir):
-
-
-    # times during entire day
-    times = pd.date_range(start_time, end_time, freq=freq) # no data in some minutes - figure that out
-    # DT currently doesn't matter - only selecting 1 timestamp based on t0
-    DT = timedelta(seconds = time_step) # will select data from +- DT
-
-    apex = apexpy.Apex(times[0], refh = 110)
-
-    # set up grid
-    position = (-147, 65) # lon, lat
-    orientation = (-1, 2) # east, north
-    L, W, Lres, Wres = 500e3, 500e3, x_resolution, y_resolution # dimensions and resolution of grid
-    grid = lompe.cs.CSgrid(lompe.cs.CSprojection(position, orientation), L, W, Lres, Wres, R = 6481.2e3)
+def collect_data(pfisrfn, time_intervals):
 
     with h5py.File(pfisrfn,"r") as h5:
         # O+ indexing - error could come about if -1 used instead of 0
@@ -47,41 +31,14 @@ def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_r
         kn = h5['Geomag/kn'][:]
         kz = h5['Geomag/kz'][:]
 
-    # get figures from entire day and save somewhere
+    pfisr_data = list()
 
-
-    SH = lambda lon = grid.lon, lat = grid.lat: hardy_EUV(lon, lat, Kp, times[0], 'hall'    )
-    SP = lambda lon = grid.lon, lat = grid.lat: hardy_EUV(lon, lat, Kp, times[0], 'pedersen')
-    model = lompe.Emodel(grid, Hall_Pedersen_conductance = (SH, SP))
-
-    # loop through times and save
-    for t in times[:]:
-        print("t: ",t)
-    
-        SH = lambda lon = grid.lon, lat = grid.lat: hardy_EUV(lon, lat, Kp, t, 'hall'    )
-        SP = lambda lon = grid.lon, lat = grid.lat: hardy_EUV(lon, lat, Kp, t, 'pedersen')
-
-        model.clear_model(Hall_Pedersen_conductance = (SH, SP)) # reset
-    
-        pfisr_data = prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t, t + DT)
-    
-        model.add_data(pfisr_data)
-
-        gtg, ltl = model.run_inversion(l1 = 2, l2 = 0.1)
-    
-        #vvels_fn='/Users/clevenger/Projects/lompe_pfisr/vvels_in/20170616.001_lp_1min-fitcal-vvels_lat.h5'
-        #vvels_in=pickle.dump(model, vvels_fn)
-
-        # USE FOR SAVING MODEL PLOTS
-        savefile = os.path.join(plot_save_outdir,str(t).replace(' ','_').replace(':',''))
-        print(savefile)
-        lompe.lompeplot(model, include_data = True, time = t, apex = apex, savekw = {'fname': savefile, 'dpi' : 200})
-
-        # USE FOR SAVING MODEL NCs
-        savefile = os.path.join(nc_save_outdir,str(t).replace(' ','_').replace(':','')+'.nc') # create directory to save output as nc to read in
-        save_model(model, file_name=savefile) # one file per time stamp
+    for i, row in time_intervals.iterrows():
+        print(i, row)
         
-        # pathlib; os.path for filenames/outdirs
+        pfisr_data.append(prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, row['starttime'], row['endtime']))
+
+    return pfisr_data
 
 # These files contain entire AMISR experiment. Function to select from a smaller time interval is needed:
 def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1):
