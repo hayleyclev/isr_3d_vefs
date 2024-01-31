@@ -1,17 +1,12 @@
 # pfrr_run_lompe.py
 
 import numpy as np
-import pandas as pd
-# import datetime
-from datetime import timedelta
-from lompe.utils.conductance import hardy_EUV
 import apexpy
 import lompe
-import matplotlib.pyplot as plt
+from lompe.utils.conductance import hardy_EUV
+from lompe.utils.save_load_utils import save_model
 import h5py
 import os
-from lompe.utils.save_load_utils import save_model
-plt.ioff()
 import pfisr_datahandler as pfisr
 import mag_datahandler as mag
 

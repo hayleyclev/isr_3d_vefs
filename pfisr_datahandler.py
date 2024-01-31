@@ -1,19 +1,11 @@
 import numpy as np
-import pandas as pd
-# import datetime
 import datetime as dt
-from datetime import timedelta
-from lompe.utils.conductance import hardy_EUV
-import apexpy
 import lompe
-import matplotlib.pyplot as plt
 import h5py
-import os
-from lompe.utils.save_load_utils import save_model
-plt.ioff()
 
 def collect_data(pfisrfn, time_intervals):
 
+    # read in datafile
     with h5py.File(pfisrfn,"r") as h5:
         # O+ indexing - error could come about if -1 used instead of 0
         # beam_codes = h5['BeamCodes'][:,0]
@@ -34,7 +26,7 @@ def collect_data(pfisrfn, time_intervals):
 
     pfisr_data = list()
 
-    #for i, row in time_intervals.iterrows():
+    # collect lompe Data object for each time interval
     for i, (stime, etime) in enumerate(time_intervals):
 
         unix_stime = (stime-dt.datetime.utcfromtimestamp(0)).total_seconds()
@@ -49,15 +41,10 @@ def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1):
     """ get data from correct time period """
 
     Tidx1 = np.argmin(np.abs(Midtime[:] - t0)) # will need Tidx1 AND Tidx2
-    print("Tidx1: ",Tidx1) 
-    print(t0, pd.to_datetime(Midtime[Tidx1], unit='s'))
     Tidx2 = np.argmin(np.abs(Midtime[:] - t1)) # number of beams x number of bins - 
-    print("Tidx2: ",Tidx2)
-    print(t1, pd.to_datetime(Midtime[Tidx2], unit='s'))
 
     print('Vlos', Vlos[Tidx1:Tidx2, :, :].shape) 
     
-    # hard coded for now - make dynamic to time interval later
     glat_new = np.tile(glat, (Tidx2 - Tidx1, 1, 1)) # expanded, to flatten later
     glon_new = np.tile(glon, (Tidx2 - Tidx1, 1, 1)) # expanded, to flatten later
     
