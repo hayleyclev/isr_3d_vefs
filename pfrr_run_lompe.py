@@ -15,19 +15,23 @@ plt.ioff()
 import pfisr_datahandler as pfisr
 import mag_datahandler as mag
 
-def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_resolution, 
-                    plot_save_outdir, nc_save_outdir, pfisrfn=None, pokermagfn=None):
+def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution,
+                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None):
 
+    time0 = [start_time+time_step*i for i in range(int((end_time-start_time)/time_step))]
+    time1 = [t0+time_step for t0 in time0]
+    time_intervals = np.array([time0, time1]).T
+    #print(time_intervals)
 
-    # times during entire day
-    starttime = pd.date_range(start_time, end_time, freq=freq) # no data in some minutes - figure that out
-    # DT currently doesn't matter - only selecting 1 timestamp based on t0
-    DT = timedelta(seconds = time_step) # will select data from +- DT
-    endtime = starttime + DT
-    time_intervals = pd.DataFrame(data={'starttime':starttime, 'endtime':endtime})
-    print(time_intervals)
+    ## times during entire day
+    #starttime = pd.date_range(start_time, end_time, freq=freq) # no data in some minutes - figure that out
+    ## DT currently doesn't matter - only selecting 1 timestamp based on t0
+    #DT = timedelta(seconds = time_step) # will select data from +- DT
+    #endtime = starttime + DT
+    #time_intervals = pd.DataFrame(data={'starttime':starttime, 'endtime':endtime})
+    #print(time_intervals)
 
-    apex = apexpy.Apex(starttime[0], refh = 110)
+    apex = apexpy.Apex(start_time, refh = 110)
 
     # set up grid
     position = (-147, 65) # lon, lat
@@ -47,8 +51,9 @@ def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_r
         mag_data = mag.collect_data(pokermagfn, time_intervals)
 
     # loop through times and save
-    for i, row in time_intervals.iterrows():
-        t = row['starttime']
+    #for i, row in time_intervals.iterrows():
+    for i, (stime, etime) in enumerate(time_intervals):
+        t = stime
         print("t: ",t)
     
         SH = lambda lon = grid.lon, lat = grid.lat: hardy_EUV(lon, lat, Kp, t, 'hall'    )
@@ -61,6 +66,9 @@ def run_lompe_pfisr(start_time, end_time, freq, time_step, Kp, x_resolution, y_r
             model.add_data(pfisr_data[i])
         if pokermagfn:
             model.add_data(mag_data[i])
+
+        #SD_data = fitacf_get_lompe(fn, starttime, endtime)
+        #model.add_data(SD_data)
 
         # run model
         gtg, ltl = model.run_inversion(l1 = 2, l2 = 0.1)

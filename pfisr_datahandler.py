@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 # import datetime
+import datetime as dt
 from datetime import timedelta
 from lompe.utils.conductance import hardy_EUV
 import apexpy
@@ -25,7 +26,7 @@ def collect_data(pfisrfn, time_intervals):
         glon = h5['Geomag/Longitude'][:]
         galt = h5['Geomag/Altitude'][:]
         utime = h5['Time/UnixTime'][:]
-        Midtime = np.mean(utime, axis=1)
+        unix_Midtime = np.mean(utime, axis=1)
     
         ke = h5['Geomag/ke'][:]
         kn = h5['Geomag/kn'][:]
@@ -33,10 +34,13 @@ def collect_data(pfisrfn, time_intervals):
 
     pfisr_data = list()
 
-    for i, row in time_intervals.iterrows():
-        print(i, row)
+    #for i, row in time_intervals.iterrows():
+    for i, (stime, etime) in enumerate(time_intervals):
+
+        unix_stime = (stime-dt.datetime.utcfromtimestamp(0)).total_seconds()
+        unix_etime = (etime-dt.datetime.utcfromtimestamp(0)).total_seconds()
         
-        pfisr_data.append(prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, row['starttime'], row['endtime']))
+        pfisr_data.append(prepare_data(ke, kn, kz, Vlos, glat, glon, galt, unix_Midtime, unix_stime, unix_etime))
 
     return pfisr_data
 
@@ -44,10 +48,10 @@ def collect_data(pfisrfn, time_intervals):
 def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1):
     """ get data from correct time period """
 
-    Tidx1 = np.argmin(np.abs(Midtime[:] - t0.timestamp())) # will need Tidx1 AND Tidx2
+    Tidx1 = np.argmin(np.abs(Midtime[:] - t0)) # will need Tidx1 AND Tidx2
     print("Tidx1: ",Tidx1) 
     print(t0, pd.to_datetime(Midtime[Tidx1], unit='s'))
-    Tidx2 = np.argmin(np.abs(Midtime[:] - t1.timestamp())) # number of beams x number of bins - 
+    Tidx2 = np.argmin(np.abs(Midtime[:] - t1)) # number of beams x number of bins - 
     print("Tidx2: ",Tidx2)
     print(t1, pd.to_datetime(Midtime[Tidx2], unit='s'))
 

@@ -7,6 +7,7 @@ Created on Tue Dec 12 12:11:07 2023
 """
 
 import numpy as np
+import datetime as dt
 import pandas as pd
 from datetime import timedelta
 from lompe.utils.conductance import hardy_EUV
@@ -31,14 +32,17 @@ def collect_data(supermagfn, time_intervals):
 
     supermag_data = list()
 
-    for i, row in time_intervals.iterrows():
+    #for i, row in time_intervals.iterrows():
+    for i, (t0, t1) in enumerate(time_intervals):
         
-        t0 = row['starttime']
-        t1 = row['endtime']
+        #t0 = row['starttime']
+        #t1 = row['endtime']
    
-        # Find magnetometer data that falls within the current ISR data chunk time range
-        t0_unix = t0.timestamp()
-        t1_unix = t1.timestamp()
+        ## Find magnetometer data that falls within the current ISR data chunk time range
+        #t0_unix = t0.timestamp()
+        #t1_unix = t1.timestamp()
+        t0_unix = (t0-dt.datetime.utcfromtimestamp(0)).total_seconds()
+        t1_unix = (t1-dt.datetime.utcfromtimestamp(0)).total_seconds()
        
         # Pull mag data from desired time range in unix time
         mag_data_DT = mag_data[(mag_data['unix_time'] >= t0_unix) & (mag_data['unix_time'] < t1_unix)]
@@ -59,7 +63,7 @@ def collect_data(supermagfn, time_intervals):
       
         
         # Create Lompe data object for the magnetometer data
-        supermag_data.append(lompe.Data(B, coords_mag, datatype='ground_mag', error=10e-9, iweight=0.001))
+        supermag_data.append(lompe.Data(B, coords_mag, datatype='ground_mag', error=10e-9, iweight=0.1))
 
 
     # Return the prepared data
