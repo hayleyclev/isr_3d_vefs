@@ -23,7 +23,7 @@ def collect_data(supermagfn, time_intervals):
       
         # Create magnetic field object
         #B = mag_data_DT[['dbn_nez', 'dbe_nez', 'dbz_nez']].values.T * 1e-9 # Convert to nanoesla from Tesla
-        B = mag_data_DT[['dbn_nez', 'dbe_nez', 'dbz_nez']].values.T * 1e-9 # supermag given in nT, lompe needs Tesla so convert to Tesla
+        B = mag_data_DT[['dbe_nez', 'dbn_nez', 'dbz_nez']].values.T * 1e-9 # supermag given in nT, lompe needs Tesla so convert to Tesla
         #B = np.tile(B, (mag_data_DT.shape[0], 1)).T
         print("B Shape: ", B.shape) # should be (3, N)
        
