@@ -1,3 +1,12 @@
+"""
+takes a vvels file (generated using vvels tools) and lompe model outputs from same date/time and creates a comparison
+plot - will be adding this to the lompe model script so that these plots can output with the generic model plots
+
+will likely make this import vvels_lompe_comp_tool into the pfrr_run_lompe with vvels fn as an optional input??
+
+"""
+
+
 import numpy as np
 import h5py
 import datetime as dt
@@ -14,7 +23,6 @@ def extract_time_from_filename(filename):
 
 
 def find_closest_time(h5, target_time):
-    """Finds the index of the closest time to target_time in the HDF5 file."""
     utime = h5['Time/UnixTime'][:]
     times = np.mean(utime, axis=1)  # Assuming the mean of start and end times
     times_dt = np.array([dt.datetime.utcfromtimestamp(t) for t in times])
