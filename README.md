@@ -5,7 +5,7 @@ This code uses the Lompe model (https://github.com/klaundal/lompe) to generate t
 
 The following figure describes what data can be taken in and what information can be reconstructed.  Please note that not all inputs are required (all reconstructions can be performed with a single data input), however, the higher the data density, the more physically realistic the reconstruction.
 
-<img width="792" alt="image" src="https://github.com/hayleyclev/isr_3d_vefs/assets/114105668/6cd6d70f-ca63-4307-87a1-f46158351968">
+<img width="792" alt="image" src="https://github.com/hayleyclev/isr_3d_vefs/assets/114105668/c649e715-67ce-4f5b-9c3e-7d7a59d028dd">
 
 ## Instructions for Running
 
