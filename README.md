@@ -106,9 +106,10 @@ The following figure describes what data can be taken in and what information ca
 - Swarm (viresclient request; see Step 3)
 
 3. If you plan to use Swarm data, create a viresclient token:
+   
 After installing viresclient, continue to https://viresclient.readthedocs.io/en/latest/installation.html and follow the steps to create a viresclient token.  Save this token and have it ready to type/paste every time you run the top-level script for every instance of pulling Swarm data.
 
-4. Either open the isr_3d_vefs/pfrr_runscript.py file, or set up your own run script using the following template:
+5. Either open the isr_3d_vefs/pfrr_runscript.py file, or set up your own run script using the following template:
 
 ```
 from pfrr_run_lompe import run_lompe_pfisr
@@ -178,19 +179,25 @@ Additionally, you can compare your Lompe model outputs to vvels using output_tes
 ## Notes for Users
 As with any open source code, this code is free for anyone to clone, fork, etc to make changes to and use however you please. But as a general note, here is how the code is structured so that you can have a clear idea as to "what goes where" for any changes you may need to make for your own use.  The code is broken into four main groups:
 1. Top-Level
-   This is isr_3d_vefs/pfrr_runscript.py.  Here is where you determine base-level options like which types of data to use that you have available,       event dates and times, time step, Kp, and resolution.
-2. Mid-Level
-   This is isr_3d_vefs/pfrr_run_lompe.py.  Here is where you can determine more parameters, such as the area of interest (it is currently set over       Poker Flat, AK so this is how you could change it to another high-latitude area), regularization parameters, and more. I would highly recommend       reading the Local Mapping of Polar Ionospheric Electrodynamics paper [Laundal et. al 2022]
-   (https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2022JA030356) before making changes to these variables, especially to the regularization
+   
+   This is isr_3d_vefs/pfrr_runscript.py.  Here is where you determine base-level options like which types of data to use that you have available,       event dates and times, time step, Kp,
+   and resolution.
+3. Mid-Level
+   
+   This is isr_3d_vefs/pfrr_run_lompe.py.  Here is where you can determine more parameters, such as the area of interest (it is currently set over       Poker Flat, AK so this is how you could
+   change it to another high-latitude area), regularization parameters, and more. I would highly recommend       reading the Local Mapping of Polar Ionospheric Electrodynamics paper [Laundal
+   et. al 2022] (https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2022JA030356) before making changes to these variables, especially to the regularization
    parameters.
-4. Low-Level
+5. Low-Level
+
    This includes isr_3d_vefs/mag_datahandler.py, isr_3d_vefs/pfisr_datahandler.py, isr_3d_vefs/superdarn_datahandler.py,
    isr_3d_vefs/swarm_a_mag_datahandler.py, isr_3d_vefs/swarm_b_mag_datahandler.py, and isr_3d_vefs/swarm_c_mag_datahandler.py.  As you may have
    noticed, each of these are termed as data handlers. Each of these scripts perform any work that must be done to format the input data in a way 
    that Lompe can perform its inversion process. The only parameter that can be tweaked here without breaking the script architecture is the
    iweight factor within each of these respective data handlers. Prior to changing these, I would again recommend reading the Laundal et. al 2022 
    paper.
-6. Post-Processing
+7. Post-Processing
+
    These are output_testing_tools/load_model_tester.py and output_testing_tools/lompe_velocity_vvelds_comp_tool.py.  These are left as a means of
    testing your outputs to ensure everything works as expected.
 
