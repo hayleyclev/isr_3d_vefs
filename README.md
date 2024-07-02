@@ -109,7 +109,7 @@ The following figure describes what data can be taken in and what information ca
    
 After installing viresclient, continue to https://viresclient.readthedocs.io/en/latest/installation.html and follow the steps to create a viresclient token.  Save this token and have it ready to type/paste every time you run the top-level script for every instance of pulling Swarm data.
 
-5. Either open the isr_3d_vefs/pfrr_runscript.py file, or set up your own run script using the following template:
+4. Either open the isr_3d_vefs/pfrr_runscript.py file, or set up your own run script using the following template:
 
 ```
 from pfrr_run_lompe import run_lompe_pfisr
@@ -182,13 +182,13 @@ As with any open source code, this code is free for anyone to clone, fork, etc t
    
    This is isr_3d_vefs/pfrr_runscript.py.  Here is where you determine base-level options like which types of data to use that you have available,       event dates and times, time step, Kp,
    and resolution.
-3. Mid-Level
+2. Mid-Level
    
    This is isr_3d_vefs/pfrr_run_lompe.py.  Here is where you can determine more parameters, such as the area of interest (it is currently set over       Poker Flat, AK so this is how you could
    change it to another high-latitude area), regularization parameters, and more. I would highly recommend       reading the Local Mapping of Polar Ionospheric Electrodynamics paper [Laundal
    et. al 2022] (https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2022JA030356) before making changes to these variables, especially to the regularization
    parameters.
-5. Low-Level
+3. Low-Level
 
    This includes isr_3d_vefs/mag_datahandler.py, isr_3d_vefs/pfisr_datahandler.py, isr_3d_vefs/superdarn_datahandler.py,
    isr_3d_vefs/swarm_a_mag_datahandler.py, isr_3d_vefs/swarm_b_mag_datahandler.py, and isr_3d_vefs/swarm_c_mag_datahandler.py.  As you may have
@@ -196,7 +196,7 @@ As with any open source code, this code is free for anyone to clone, fork, etc t
    that Lompe can perform its inversion process. The only parameter that can be tweaked here without breaking the script architecture is the
    iweight factor within each of these respective data handlers. Prior to changing these, I would again recommend reading the Laundal et. al 2022 
    paper.
-7. Post-Processing
+4. Post-Processing
 
    These are output_testing_tools/load_model_tester.py and output_testing_tools/lompe_velocity_vvelds_comp_tool.py.  These are left as a means of
    testing your outputs to ensure everything works as expected.
