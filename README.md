@@ -16,7 +16,7 @@ The following figure describes what data can be taken in and what information ca
      ```
    - lompe
      ```
-     pip install lompe
+     pip install "lompe[deps-from-github,extras] @ git+https://github.com/klaundal/lompe.git@main"
      ```
    - apexpy
      ```
