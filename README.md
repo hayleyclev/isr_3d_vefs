@@ -1,4 +1,4 @@
-# isr_3d_vefs
+# isr_3d_vefs (v1.0.0)
 This repository is a host for scripts used to resolve vector electric fields (VEFs) from incoherent scatter radar (ISR) data.
 
 This code uses the Lompe model (https://github.com/klaundal/lompe) to generate two-dimensional (geodetic latitude and geodetic longitude) electrodynamic reconstructions of the plasma velocity flow field and current system in the local region of Poker Flat.  These reconstructions can be used for a variety of scientific investigations, or to drive a physics-based model such as GEMINI (https://github.com/gemini3d). 
