@@ -20,7 +20,7 @@ Parameters Out:
     
 """
     
-def collect_data(fitacf_dir, time_intervals, radar_id):
+def collect_data(fitacf_dir, time_intervals, radar_id, iweight):
     fitacf_files = glob.glob(f"{fitacf_dir}/{radar_id}/*")
 
     """
@@ -160,7 +160,7 @@ def collect_data(fitacf_dir, time_intervals, radar_id):
         #los0 = np.vstack((ln[n], le[n]))
         print("los0 shape: ", los0.shape)
     
-        superdarn_data.append(lompe.Data(vlos0, coordinates = coords0, LOS = los0, datatype = 'convection', scale = None, iweight=1.0))
+        superdarn_data.append(lompe.Data(vlos0, coordinates = coords0, LOS = los0, datatype = 'convection', scale = None, iweight=iweight))
 
     return superdarn_data
 

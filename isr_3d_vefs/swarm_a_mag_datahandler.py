@@ -3,6 +3,7 @@ from viresclient import SwarmRequest
 import numpy as np
 import ppigrf
 import lompe
+import os
 
 """
 Parameters In: 
@@ -18,9 +19,13 @@ Parameters Out:
     
 """
 
-def collect_data(start_time, end_time, time_step):
+def collect_data(start_time, end_time, time_step, iweight):
     # Create viresclient request for Swarm A
-    viresclient.set_token()
+    token = os.environ.get("VIRES_TOKEN")
+    if token:
+        viresclient.set_token(token)
+    else:
+        print("VIRES_TOKEN environment variable not set.  Please set it.")
     prime = "SW_OPER_MAGA_HR_1B" # hard coding in which satellite from constellation - "MAGx"
     
     # Initialize Swarm magnetometer data array
@@ -70,7 +75,7 @@ def collect_data(start_time, end_time, time_step):
         dB_chunk = np.vstack((chunk_df.Be.values, chunk_df.Bn.values, chunk_df.Bu.values))
         coords_chunk = np.vstack((chunk_df.Longitude.values, chunk_df.Latitude.values, (6371.2 + height) * 1e3))
         
-        swarm_a_mag_data.append(lompe.Data(values=dB_chunk * 1e-9, coordinates=coords_chunk, datatype='space_mag_full', iweight=1.0))
+        swarm_a_mag_data.append(lompe.Data(values=dB_chunk * 1e-9, coordinates=coords_chunk, datatype='space_mag_full', iweight=iweight))
 
         current_time = next_time
         

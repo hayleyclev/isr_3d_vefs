@@ -14,7 +14,7 @@ Parameters Out:
     
 """
 
-def collect_data(supermagfn, time_intervals):
+def collect_data(supermagfn, time_intervals, iweight):
 
     # Read in mag data
     mag_data = pd.read_csv(supermagfn)
@@ -45,7 +45,7 @@ def collect_data(supermagfn, time_intervals):
       
         
         # Create Lompe data object for the magnetometer data
-        supermag_data.append(lompe.Data(B, coords_mag, datatype='ground_mag', error=10e-9, iweight=0.4))
+        supermag_data.append(lompe.Data(B, coords_mag, datatype='ground_mag', error=10e-9, iweight=iweight))
 
 
     # Return the prepared data

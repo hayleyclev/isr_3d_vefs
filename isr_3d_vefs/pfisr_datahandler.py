@@ -15,7 +15,7 @@ Parameters Out:
     
 """
 
-def collect_data(pfisrfn, time_intervals):
+def collect_data(pfisrfn, time_intervals, iweight):
 
     # read in datafile
     with h5py.File(pfisrfn,"r") as h5:
@@ -44,12 +44,12 @@ def collect_data(pfisrfn, time_intervals):
         unix_stime = (stime-dt.datetime.utcfromtimestamp(0)).total_seconds()
         unix_etime = (etime-dt.datetime.utcfromtimestamp(0)).total_seconds()
         
-        pfisr_data.append(prepare_data(ke, kn, kz, Vlos, glat, glon, galt, unix_Midtime, unix_stime, unix_etime))
+        pfisr_data.append(prepare_data(ke, kn, kz, Vlos, glat, glon, galt, unix_Midtime, unix_stime, unix_etime, iweight))
 
     return pfisr_data
 
 # These files contain entire AMISR experiment. Function to select from a smaller time interval is needed:
-def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1):
+def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1, iweight):
     """ get data from correct time period """
 
     Tidx1 = np.argmin(np.abs(Midtime[:] - t0)) # will need Tidx1 AND Tidx2
@@ -92,7 +92,7 @@ def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1):
     los = np.array([ke_norm_new.flatten(), kn_norm_new.flatten()])
     print("los shape: ",los.shape)
     
-    pfisr_data = lompe.Data(vlos, coordinates = coords, LOS = los, datatype = 'convection', scale = None) # vlos - no time records x no beams  no range gates 
+    pfisr_data = lompe.Data(vlos, coordinates = coords, LOS = los, datatype = 'convection', scale = None, iweight=iweight) # vlos - no time records x no beams  no range gates 
     # duplicate for coords and los - use np.tile() to do this - flatten to keep shape
     #print("prepared vlos: ", vlos)
     #print("prepared los: ", los)
