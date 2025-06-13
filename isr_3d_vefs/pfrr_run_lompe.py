@@ -11,7 +11,7 @@ import swarm_b_mag_datahandler as bmag
 import swarm_c_mag_datahandler as cmag
 import superdarn_datahandler as sd
 #import swarm_a_efi_datahandler as aefi
-import swarm_efi_handler as aefi
+#import swarm_efi_handler as aefi
 import swarm_a_tii_datahandler as atii
 import swarm_c_tii_datahandler as ctii
 from lompe.utils import conductance
@@ -41,7 +41,7 @@ Purpose:
 
 def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, pfisr_weight, superdarn_weight, mag_weight, swarm_mag_weight, swarm_tii_weight,
                     swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
-                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, swarm_a_tii_fn=None, swarm_a_efi_fn=None):
+                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, swarm_a_tii_fn=None, swarm_c_tii_fn=None, swarm_a_efi_fn=None):
 #def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, savefile, swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
                     #plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None):
 
@@ -54,7 +54,7 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
     # Set up grid
     position = (-147, 65) # lon, lat
     orientation = (-1, 2) # east, north
-    L, W, Lres, Wres = 1000e3, 1000e3, x_resolution, y_resolution # dimensions and resolution of grid
+    L, W, Lres, Wres = 500e3, 500e3, x_resolution, y_resolution # dimensions and resolution of grid
     grid = lompe.cs.CSgrid(lompe.cs.CSprojection(position, orientation), L, W, Lres, Wres, R = 6481.2e3)
     
     #savefile = read_asi(start_time=start_time, end_time=end_time, hemi='north', tempfile_path='./')
@@ -99,15 +99,17 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
     swarm_b_mag_data = bmag.collect_data(start_time, end_time, time_step, iweight=swarm_mag_weight) if swarm_b_prime else None
     swarm_c_mag_data = cmag.collect_data(start_time, end_time, time_step, iweight=swarm_mag_weight) if swarm_c_prime else None
     
+    #if swarm_a_tii_fn:
+        #swarm_a_tii_data = atii.collect_data(swarm_a_tii_fn, start_time, end_time, time_step, iweight=swarm_tii_weight)
     if swarm_a_tii_fn:
-        swarm_a_tii_data = atii.collect_data(swarm_a_tii_fn, start_time, end_time, time_step, iweight=swarm_tii_weight)
+        swarm_a_tii_data = atii.collect_data(swarm_a_tii_fn, start_time, end_time, time_step, swarm_tii_weight)
+    if swarm_c_tii_fn:
+        swarm_c_tii_data = ctii.collect_data(swarm_c_tii_fn, start_time, end_time, time_step, swarm_tii_weight)
+        
     
-    print(f"Length of swarm_a_tii_data: {len(swarm_a_tii_data)}")
-    print(f"Length of time_intervals: {len(time_intervals)}")
+    #print(f"Length of swarm_a_tii_data: {len(swarm_a_tii_data)}")
+    #print(f"Length of time_intervals: {len(time_intervals)}")
 
-    
-    if swarm_a_efi_fn:
-        swarm_a_efi_data = aefi.collect_data(swarm_a_efi_fn, start_time, end_time)
 
     # Loop through times and save
     for i, (stime, etime) in enumerate(time_intervals):
@@ -127,8 +129,6 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
         if superdarn_direc:
             model.add_data(superdarn_kod_data[i])
             #model.add_data(superdarn_ksr_data[i])
-        if swarm_a_efi_fn:
-            model.add_data(swarm_a_tii_data[i])
         if swarm_a_prime:
             model.add_data(swarm_a_mag_data[i])
             #model.add_data(swarm_a_tii_data[i])
@@ -137,8 +137,10 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
         if swarm_c_prime:
             model.add_data(swarm_c_mag_data[i])
             #model.add_data(swarm_c_tii_data[i])
-        if swarm_a_efi_fn:
-            model.add_data(swarm_a_efi_data[i])
+        if swarm_a_tii_fn:
+            model.add_data(swarm_a_tii_data[i])
+        if swarm_c_tii_fn:
+            model.add_data(swarm_c_tii_data[i])
             
             
 
