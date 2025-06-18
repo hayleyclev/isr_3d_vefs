@@ -13,6 +13,7 @@ import superdarn_datahandler as sd
 #import swarm_a_efi_datahandler as aefi
 #import swarm_efi_handler as aefi
 import swarm_a_tii_datahandler as atii
+import swarm_b_tii_datahandler as btii
 import swarm_c_tii_datahandler as ctii
 from lompe.utils import conductance
 import xarray as xr
@@ -41,7 +42,7 @@ Purpose:
 
 def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, pfisr_weight, superdarn_weight, mag_weight, swarm_mag_weight, swarm_tii_weight,
                     swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
-                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, swarm_a_tii_fn=None, swarm_c_tii_fn=None, swarm_a_efi_fn=None):
+                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, swarm_a_tii_fn=None, swarm_b_tii_fn=None, swarm_c_tii_fn=None, swarm_a_efi_fn=None):
 #def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, savefile, swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
                     #plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None):
 
@@ -103,6 +104,8 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
         #swarm_a_tii_data = atii.collect_data(swarm_a_tii_fn, start_time, end_time, time_step, iweight=swarm_tii_weight)
     if swarm_a_tii_fn:
         swarm_a_tii_data = atii.collect_data(swarm_a_tii_fn, start_time, end_time, time_step, swarm_tii_weight)
+    if swarm_b_tii_fn:
+        swarm_b_tii_data = btii.collect_data(swarm_b_tii_fn, start_time, end_time, time_step, swarm_tii_weight)
     if swarm_c_tii_fn:
         swarm_c_tii_data = ctii.collect_data(swarm_c_tii_fn, start_time, end_time, time_step, swarm_tii_weight)
         
@@ -139,6 +142,8 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
             #model.add_data(swarm_c_tii_data[i])
         if swarm_a_tii_fn:
             model.add_data(swarm_a_tii_data[i])
+        if swarm_b_tii_fn:
+            model.add_data(swarm_b_tii_data[i])
         if swarm_c_tii_fn:
             model.add_data(swarm_c_tii_data[i])
             
