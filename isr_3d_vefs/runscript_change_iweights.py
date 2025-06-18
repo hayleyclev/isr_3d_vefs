@@ -33,8 +33,8 @@ swarm_c_tii_fn = None
 Set main direcs for where data is located if all in same directory
 """
 paper01_direc = '/Users/clevenger/Projects/paper01/sop23_data/202302/12/'
-sd_direc = '/Users/clevenger/Projects/superDARN/test_data/fitacf_30/'
-sd_station = 'kod/' # and also set which SD station 'kod/' or 'ksr/'
+#sd_direc = '/Users/clevenger/Projects/paper01/sop23_data/202302/08/superdarn/'
+#sd_station = 'kod/' # and also set which SD station 'kod/' or 'ksr/'
 
 """
 20230227 files
@@ -60,7 +60,7 @@ sd_station = 'kod/' # and also set which SD station 'kod/' or 'ksr/'
 20230210 SD trial
 """
 #superdarn_fn = sd_direc + sd_station + '2023/202302/20230212/'
-superdarn_fn = '/Users/clevenger/Projects/data_assimilation/feb_12/input_data/SuperDARN/data/ksr/'
+superdarn_fn = '/Users/clevenger/Projects/paper01/sop23_data/202302/27/superdarn/'
 
 """
 For swarm mags
@@ -74,10 +74,10 @@ swarm_c_prime = None
 """
 Select start and end times for model run
 """
-#start_time = dt.datetime(2023, 2, 27, 8, 35, 0)
-#end_time = dt.datetime(2023, 2, 27, 8, 40, 0)
-start_time = dt.datetime(2023, 2, 12, 16, 30, 0)
-end_time = dt.datetime(2023, 2, 12, 22, 0, 0)
+start_time = dt.datetime(2023, 2, 27, 8, 30, 0)
+end_time = dt.datetime(2023, 2, 27, 9, 30, 0)
+#start_time = dt.datetime(2023, 2, 8, 10, 0, 0)
+#end_time = dt.datetime(2023, 2, 8, 11, 0, 0)
 #start_time = dt.datetime(2023, 2, 14, 9, 10, 0)
 #end_time = dt.datetime(2023, 2, 14, 9, 30, 0)
 
@@ -85,7 +85,7 @@ end_time = dt.datetime(2023, 2, 12, 22, 0, 0)
 Other tweakable things
 """
 time_step = dt.timedelta(minutes=5)
-Kp = 3
+Kp = 6
 x_resolution = 10.e3
 y_resolution = 10.e3
 

@@ -97,6 +97,9 @@ def collect_data(fitacf_dir, time_intervals, radar_id, iweight):
             print("length of fitacf_data:", len(fitacf_data))
             
             for i in chunk_indices:
+                if 'slist' not in fitacf_data[i] or fitacf_data[i]['slist'] is None:
+                    print(f"Skipping record {i}: 'slist' not found or is None")
+                    continue
                 
                 print(fitacf_data[i].keys())
                 slist = fitacf_data[i]['slist']
