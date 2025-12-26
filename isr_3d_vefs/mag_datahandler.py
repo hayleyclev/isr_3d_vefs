@@ -50,5 +50,3 @@ def collect_data(supermagfn, time_intervals, iweight):
 
     # Return the prepared data
     return supermag_data
-
-

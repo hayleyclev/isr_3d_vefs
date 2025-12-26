@@ -10,8 +10,6 @@ import swarm_a_mag_datahandler as amag
 import swarm_b_mag_datahandler as bmag
 import swarm_c_mag_datahandler as cmag
 import superdarn_datahandler as sd
-#import swarm_a_efi_datahandler as aefi
-#import swarm_efi_handler as aefi
 import swarm_a_tii_datahandler as atii
 import swarm_b_tii_datahandler as btii
 import swarm_c_tii_datahandler as ctii
@@ -43,8 +41,6 @@ Purpose:
 def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, pfisr_weight, superdarn_weight, mag_weight, swarm_mag_weight, swarm_tii_weight,
                     swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
                     plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, swarm_a_tii_fn=None, swarm_b_tii_fn=None, swarm_c_tii_fn=None, swarm_a_efi_fn=None):
-#def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, savefile, swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
-                    #plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None):
 
     time0 = [start_time+time_step*i for i in range(int((end_time-start_time)/time_step))]
     time1 = [t0+time_step for t0 in time0]
@@ -109,11 +105,9 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
     if swarm_c_tii_fn:
         swarm_c_tii_data = ctii.collect_data(swarm_c_tii_fn, start_time, end_time, time_step, swarm_tii_weight)
         
-    
     #print(f"Length of swarm_a_tii_data: {len(swarm_a_tii_data)}")
     #print(f"Length of time_intervals: {len(time_intervals)}")
-
-
+    
     # Loop through times and save
     for i, (stime, etime) in enumerate(time_intervals):
         t = stime
@@ -147,9 +141,6 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
         if swarm_c_tii_fn:
             model.add_data(swarm_c_tii_data[i])
             
-            
-
-
         # Run model
         #gtg, ltl = model.run_inversion(l1 = 1, l2 = 0.1)
         #gtg, ltl = model.run_inversion(l1 = 1, l2 = 0.1, l3 = 0.1, FAC_reg=False)
@@ -168,7 +159,4 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
             for ds in model.data[dtype]:
                 print([ds.coords[key] for key in ['lon', 'lat']])
                 
-        
         save_model(model, file_name=savefile) # one file per time stamp
-
-        

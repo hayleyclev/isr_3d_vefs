@@ -9,8 +9,8 @@ from lompe.utils.save_load_utils import load_model
 
 
 # vvels file and model save location
-vvels_fn = '/your_file_path_to_vvels_file/20230212.002_lp_1min-fitcal-vvels_lat.h5'
-save_fn = '/your_file_path_to_model_output/2023-02-12_064500.nc'
+vvels_fn = '/Users/clevenger/Projects/paper01/events/20230227/vvels/outputs/20230227_vvels.h5'
+save_fn = '/Users/clevenger/Projects/paper01/events/20230227/lompe/outputs/cases/0/2023-02-27_083500.nc'
 
 # load lompe model (or multiple if doing many comparisons)
 model = load_model(save_fn)
@@ -25,8 +25,8 @@ with h5py.File(vvels_fn, "r") as h5:
     lat = h5["VvelsGeoCoords/Latitude"][alt_ind, :]
     lon = h5["VvelsGeoCoords/Longitude"][alt_ind, :]
     
-    vel = h5["VvelsGeoCoords/Velocity"][67, alt_ind, :, :-1]
-    utime = utimes[67].astype('datetime64[s]')
+    vel = h5["VvelsGeoCoords/Velocity"][13, alt_ind, :, :-1]
+    utime = utimes[13].astype('datetime64[s]')
     print("utime:", utime)
 
 # lompe file stuff - pull velocity info

@@ -98,7 +98,3 @@ def prepare_data(ke, kn, kz, Vlos, glat, glon, galt, Midtime, t0, t1, iweight):
     #print("prepared los: ", los)
     
     return pfisr_data
-
-
-    
-    

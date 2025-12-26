@@ -14,17 +14,16 @@ Download data at these locations:
 """
 iweight params & save direc
 """
-spreadsheet_path = '/Users/clevenger/Downloads/tii_weight_test.csv'
+spreadsheet_path = '/Users/clevenger/Projects/paper01/events/20230227/lompe/inputs/parameters/paper_weights.csv' # spreadsheet with iweights specified (you can make this one input if you only care to have one single lompe run)
 df = pd.read_csv(spreadsheet_path)
-base_savepath = '/Users/clevenger/Projects/paper01/events/20230208/lompe/14_kod/'
-
+base_savepath = '/Users/clevenger/Projects/paper01/events/20230227/lompe/outputs/cases/' # save everything here
 """
 Set to 'None' for no dataset/excluding existing dataset
 """
-pfisrfn=None
-magfn=None
+#pfisrfn=None
+#magfn=None
 #superdarn_fn=None
-swarm_a_tii_fn = None
+#swarm_a_tii_fn = None
 swarm_b_tii_fn = None
 swarm_c_tii_fn = None
 
@@ -32,54 +31,32 @@ swarm_c_tii_fn = None
 """
 Set main direcs for where data is located if all in same directory
 """
-paper01_direc = '/Users/clevenger/Projects/paper01/sop23_data/202302/12/'
-#sd_direc = '/Users/clevenger/Projects/paper01/sop23_data/202302/08/superdarn/'
-#sd_station = 'kod/' # and also set which SD station 'kod/' or 'ksr/'
+paper01_direc = '/Users/clevenger/Projects/paper01/sop23_data/202302/27/'
 
 """
-20230227 files
+files under specified directory
 """
-#pfisrfn = paper01_direc + '20230227.002_lp_5min-fitcal.h5'
-#magfn = paper01_direc + 'SuperMAG_60s_custom_20230227_060000_to_175959_rev-0006.1743653071.csv'
-#superdarn_fn = sd_direc + sd_station + '2023/202302/20230227/'
-#swarm_a_tii_fn = paper01_direc + 'SW_EXPT_EFIA_TCT02_20230227T042051_20230227T164506_0302.cdf'
+pfisrfn = paper01_direc + '20230227.002_lp_5min-fitcal.h5'
+magfn = paper01_direc + 'SuperMAG_60s_custom_20230227_060000_to_175959_rev-0006.1743653071.csv'
+superdarn_fn = paper01_direc + 'superdarn/' # kod vs ksr specified in pfrr_run_lompe script, change there as needed
+swarm_a_tii_fn = paper01_direc + 'SW_EXPT_EFIA_TCT02_20230227T042051_20230227T164506_0302.cdf'
 #swarm_b_tii_fn = paper01_direc + ''
 #swarm_c_tii_fn = paper01_direc + 'SW_EXPT_EFIC_TCT02_20230227T090151_20230227T120406_0302.cdf'
-
-"""
-20230208 files
-"""
-#pfisrfn = paper01_direc + '20230208.001_lp_5min-fitcal.h5'
-#magfn = paper01_direc + 'SuperMAG_60s_custom_20230208_060000_to_175959_rev'
-#superdarn_fn = sd_direc + sd_station + '2023/202302/20230208/'
-#swarm_a_tii_fn = ''
-#swarm_b_tii_fn = paper01_direc + 'SW_EXPT_EFIB_TCT16_20230208T050251_20230208T173507_0401.cdf'
-#swarm_c_tii_fn = ''
-
-"""
-20230210 SD trial
-"""
-#superdarn_fn = sd_direc + sd_station + '2023/202302/20230212/'
-superdarn_fn = '/Users/clevenger/Projects/paper01/sop23_data/202302/27/superdarn/'
 
 """
 For swarm mags
     - set 'True' for use this satellite
     - set 'None' for NOT use this satellite
 """
-swarm_a_prime = None
+swarm_a_prime = True
 swarm_b_prime = None
-swarm_c_prime = None
+swarm_c_prime = True
 
 """
 Select start and end times for model run
 """
-start_time = dt.datetime(2023, 2, 27, 8, 30, 0)
-end_time = dt.datetime(2023, 2, 27, 9, 30, 0)
-#start_time = dt.datetime(2023, 2, 8, 10, 0, 0)
-#end_time = dt.datetime(2023, 2, 8, 11, 0, 0)
-#start_time = dt.datetime(2023, 2, 14, 9, 10, 0)
-#end_time = dt.datetime(2023, 2, 14, 9, 30, 0)
+start_time = dt.datetime(2023, 2, 27, 8, 35, 0)
+end_time = dt.datetime(2023, 2, 27, 8, 40, 0)
 
 """
 Other tweakable things

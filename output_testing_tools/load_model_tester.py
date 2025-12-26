@@ -41,4 +41,3 @@ space_mag = loaded_model.B_space()
 print("Space Mag components:")
 for i, component in enumerate(space_mag):
     print(f"  Component {i+1} shape:", component.shape)
-
