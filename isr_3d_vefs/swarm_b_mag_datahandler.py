@@ -18,9 +18,13 @@ Parameters Out:
     
 """
 
-def collect_data(start_time, end_time, time_step):
+def collect_data(start_time, end_time, time_step, iweight):
     # Create viresclient request for Swarm B
-    viresclient.set_token()
+    #token = os.environ.get("VIRES_TOKEN")
+    #if token:
+        #viresclient.set_token(token)
+    #else:
+        #print("VIRES_TOKEN environment variable not set.  Please set it.")
     prime = "SW_OPER_MAGB_HR_1B" # hard coding in which satellite from constellation - "MAGx"
     
     # Initialize Swarm magnetometer data array

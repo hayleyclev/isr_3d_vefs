@@ -40,7 +40,7 @@ Purpose:
 
 def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolution, pfisr_weight, superdarn_weight, mag_weight, swarm_mag_weight, swarm_tii_weight,
                     swarm_a_prime=None, swarm_b_prime=None, swarm_c_prime=None,
-                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, swarm_a_tii_fn=None, swarm_b_tii_fn=None, swarm_c_tii_fn=None, swarm_a_efi_fn=None):
+                    plot_save_outdir=None, nc_save_outdir=None, pfisrfn=None, pokermagfn=None, superdarn_direc=None, superdarn_radars=None, swarm_a_tii_fn=None, swarm_b_tii_fn=None, swarm_c_tii_fn=None, swarm_a_efi_fn=None):
 
     time0 = [start_time+time_step*i for i in range(int((end_time-start_time)/time_step))]
     time1 = [t0+time_step for t0 in time0]
@@ -88,9 +88,14 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
     if pokermagfn:
         mag_data = mag.collect_data(pokermagfn, time_intervals, iweight=mag_weight)
         
-    if superdarn_direc:
-        superdarn_kod_data = sd.collect_data(superdarn_direc, time_intervals, 'kod/', iweight=superdarn_weight) # for now, only one superdarn site at a time
-        #superdarn_ksr_data = sd.collect_data(superdarn_direc, time_intervals, 'ksr/')
+    superdarn_data = []
+    if superdarn_direc and superdarn_radars:
+        for radar in superdarn_radars:
+            print(f"Collecting SuperDARN data for radar: {radar}")
+            radar_data = sd.collect_data(
+                superdarn_direc, time_intervals, radar, iweight=superdarn_weight
+            )
+            superdarn_data.append(radar_data)
         
     swarm_a_mag_data = amag.collect_data(start_time, end_time, time_step, iweight=swarm_mag_weight) if swarm_a_prime else None
     swarm_b_mag_data = bmag.collect_data(start_time, end_time, time_step, iweight=swarm_mag_weight) if swarm_b_prime else None
@@ -123,9 +128,9 @@ def run_lompe_pfisr(start_time, end_time, time_step, Kp, x_resolution, y_resolut
             model.add_data(pfisr_data[i])
         if pokermagfn:
             model.add_data(mag_data[i])
-        if superdarn_direc:
-            model.add_data(superdarn_kod_data[i])
-            #model.add_data(superdarn_ksr_data[i])
+        if superdarn_direc and superdarn_radars:
+            for radar_data in superdarn_data:
+                model.add_data(radar_data[i])
         if swarm_a_prime:
             model.add_data(swarm_a_mag_data[i])
             #model.add_data(swarm_a_tii_data[i])

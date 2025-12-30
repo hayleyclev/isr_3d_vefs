@@ -5,6 +5,7 @@ import ppigrf
 import lompe
 import os
 
+
 """
 Parameters In: 
 --------------
@@ -21,11 +22,13 @@ Parameters Out:
 
 def collect_data(start_time, end_time, time_step, iweight):
     # Create viresclient request for Swarm A
-    token = os.environ.get("VIRES_TOKEN")
-    if token:
-        viresclient.set_token(token)
-    else:
-        print("VIRES_TOKEN environment variable not set.  Please set it.")
+    #token = os.environ.get("VIRES_TOKEN")
+    #if not token:
+        #viresclient.set_token(token)
+        #token = input("Enter viresclient token: ").strip()
+    #viresclient.set_token(token)
+    #else:
+        #print("VIRES_TOKEN environment variable not set.  Please set it.")
     prime = "SW_OPER_MAGA_HR_1B" # hard coding in which satellite from constellation - "MAGx"
     
     # Initialize Swarm magnetometer data array
